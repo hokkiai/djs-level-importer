@@ -1,43 +1,44 @@
 {
-    "name": "djs-level-importer",
-    "version": "1.0.0",
-    "description": "An open, JavaScript-based library to import leveling data from MEE6 and other bots. Made jointly by the Sokora and Hokki Discord bots.",
-    "type": "module",
-    "main": "./dist/index.js",
-    "types": "./dist/index.d.ts",
-    "exports": {
-        ".": {
-            "import": "./dist/index.js",
-            "types": "./dist/index.d.ts"
-        }
-    },
-    "keywords": [
-        "discord",
-        "discord.js",
-        "levels",
-        "importer",
-        "discord leveling"
-    ],
-    "author": {
-        "name": "ZakaHaceCosas",
-        "email": "zakahacecosas@protonmail.com",
-        "url": "https://zakahacecosas.github.io"
-    },
-    "contributors": [
-        {
-            "name": "The Sokora Discord bot",
-            "url": "https://sokora.org"
-        },
-        {
-            "name": "The Hokki Discord bot",
-            "url": "https://www.hokki.app"
-        }
-    ],
-    "license": "MIT",
-    "dependencies": {
-        "tatsu":"latest"
-    },
-    "devDependencies": {
-        "@types/bun": "latest"
+  "name": "@hokkiai/djs-level-importer",
+  "version": "1.0.0",
+  "description": "An open, JavaScript-based library to import leveling data from MEE6 and other bots. Made jointly by the Sokora and Hokki Discord bots.",
+  "type": "module",
+  "homepage": "https://github.com/hokkiai/djs-level-importer",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
     }
+  },
+  "keywords": [
+    "discord",
+    "discord.js",
+    "levels",
+    "importer",
+    "discord leveling"
+  ],
+  "author": {
+    "name": "ZakaHaceCosas",
+    "email": "zakahacecosas@protonmail.com",
+    "url": "https://zakahacecosas.github.io"
+  },
+  "contributors": [
+    {
+      "name": "The Sokora Discord bot",
+      "url": "https://sokora.org"
+    },
+    {
+      "name": "The Hokki Discord bot",
+      "url": "https://www.hokki.app"
+    }
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "tatsu": "latest"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  }
 }
