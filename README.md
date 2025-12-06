@@ -4,9 +4,15 @@ An open, JavaScript-based library to import leveling data from MEE6 and other bo
 
 ## Usage
 
+```bash
+pnpm install @hokkiai/djs-level-importer
+```
+
 Instantiate the `Leveler` class (exported by this package) providing the ID of the guild you want to import data from. Then, call the `GetLeaderboard` method, passing, for example, a `0` for MEE6 (more onto this later on).
 
 ```ts
+import { Leveler } from "@hokkiai/djs-level-importer";
+
 const leveler = new Leveler({
   guild: "903852579837059113", // your server's ID
 });
@@ -34,8 +40,7 @@ export interface FullUserLevels extends BaseUserLevels {
 }
 ```
 
-> [!IMPORTANT]
-> **`BaseUserLevels`** objects are returned when importing data from **Tatsu**, and **`FullUserLevels`** are returned when importing data from **MEE6**.
+> [!IMPORTANT] > **`BaseUserLevels`** objects are returned when importing data from **Tatsu**, and **`FullUserLevels`** are returned when importing data from **MEE6**.
 >
 > This is not the most intuitive, but the best thing we can do to provide you with all _possible_ data despite Tatsu not providing these extra fields that other bots provide.
 >
