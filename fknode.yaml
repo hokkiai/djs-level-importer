@@ -1,0 +1,3 @@
+prettyScript: "prettier"
+flagless:
+  flaglessPretty: true

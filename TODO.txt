@@ -1,0 +1,15 @@
+[DONE] indicates the bot being supported.
+>[WIP] indicates the bot being actively worked on.
+*[NXT] indicates the bot is to be added. Asterisk can be:
+    + likely to be worked on at some point
+    ? wanted to implement, but viability is not fully investigated
+    - unlikely to be implemented, but noted here as a known and not-yet-discarded leveling bot
+
+[DONE] MEE6
+[DONE] Tatsu
+>[WIP] Atlas
++[NXT] Polaris
+?[NXT] Amari
+?[NXT] Arcane
+?[NXT] Lurkr
+-[NXT] CarlBot
