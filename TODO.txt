@@ -8,8 +8,7 @@
 [DONE] MEE6
 [DONE] Tatsu
 >[WIP] Atlas
-+[NXT] Polaris
++[NXT] Arcane
 ?[NXT] Amari
-?[NXT] Arcane
 ?[NXT] Lurkr
 -[NXT] CarlBot
