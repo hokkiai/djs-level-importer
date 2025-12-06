@@ -19,6 +19,9 @@
     "importer",
     "discord leveling"
   ],
+  "files": [
+    "dist"
+  ],
   "author": {
     "name": "ZakaHaceCosas",
     "email": "zakahacecosas@protonmail.com",
@@ -34,11 +37,15 @@
       "url": "https://www.hokki.app"
     }
   ],
+  "scripts": {
+    "build": "tsc"
+  },
   "license": "MIT",
   "dependencies": {
     "tatsu": "latest"
   },
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/bun": "latest",
+    "typescript": "^5.9.3"
   }
 }
