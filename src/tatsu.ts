@@ -13,7 +13,7 @@ export async function TATSUGetLeaderboard(
   tkn: string | null,
   guildId: string,
 ): Promise<GuildRankings> {
-  if (!tkn) throw `No Tatsu API key provided. Cannot use Tatsu API.`;
+  if (!tkn) throw "No Tatsu API key provided. Cannot use Tatsu API.";
   const tatsu = new Tatsu(tkn);
   return await tatsu.getGuildRankings(guildId);
 }

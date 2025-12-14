@@ -38,7 +38,8 @@
     }
   ],
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "prettier": "prettier --w ."
   },
   "license": "MIT",
   "dependencies": {
@@ -46,6 +47,7 @@
   },
   "devDependencies": {
     "@types/bun": "latest",
+    "prettier": "^3.7.4",
     "typescript": "^5.9.3"
   }
 }

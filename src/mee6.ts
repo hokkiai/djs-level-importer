@@ -29,7 +29,8 @@ async function getLeaderboardPage(
   );
   const j = (await response.json()) as any;
   if (response.status !== 200) {
-    if (j.error && j.error.message) throw new Error(`${response.status}: ${j.error.message}`);
+    if (j.error && j.error.message)
+      throw new Error(`${response.status}: ${j.error.message}`);
     else throw new Error(`${response.status}: ${response.statusText}`);
   }
   return j.players.map((user: any) => {
@@ -48,7 +49,9 @@ async function getLeaderboardPage(
  * @param {Identifier} guild Guild to get the leaderboard from.
  * @returns {Promise<MEE6User[]>} Leaderboard of the guild.
  */
-export async function MEE6GetLeaderboard(guild: Identifier): Promise<MEE6User[]> {
+export async function MEE6GetLeaderboard(
+  guild: Identifier,
+): Promise<MEE6User[]> {
   const leaderboard = [];
   let pageNumber = 0;
   while (true) {

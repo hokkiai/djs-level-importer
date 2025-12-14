@@ -34,8 +34,11 @@ export interface BaseUserLevels {
 }
 
 export interface FullUserLevels extends BaseUserLevels {
-  /** Current XP **relative to the level**. */
-  current_lvl_xp: number;
+  /** Current XP **relative to the level**.
+   *
+   * Not all APIs return this, therefore it's optional.
+   */
+  current_lvl_xp?: number;
   /** Current level. */
   lvl: number;
   /** XP required to level up. */
@@ -44,15 +47,20 @@ export interface FullUserLevels extends BaseUserLevels {
 ```
 
 > [!IMPORTANT]
-> You'll be returned **`BaseUserLevels`** objects when importing data from **Tatsu** and **`FullUserLevels`** ones when importing from **MEE6**.
+> You'll be returned **`BaseUserLevels`** objects when importing data from **Tatsu** and **`FullUserLevels`** ones when importing from **MEE6** or **Lurkr**.
+
+This interface division is not the most intuitive, but the best thing we can do to provide you with all _possible_ data despite Tatsu not providing these extra fields that other bots provide.
+
+**Bear in mind that extensions to bot support may or may not result in breaking changes to these interfaces** (we'll try to avoid them as much as we can).
+
+> [!CAUTION]
+> About already planned breaking changes:
 >
-> This is not the most intuitive, but the best thing we can do to provide you with all _possible_ data despite Tatsu not providing these extra fields that other bots provide.
->
-> **Bear in mind that extensions to bot support may or may not result in breaking changes to these interfaces** (we'll try to avoid them as much as we can).
+> - The `current_lvl_xp` property wasn't too well thought and we'll probably remove it (by the next major, to comply with SemVer). Avoid depending on it.
 
 ## Bot support
 
-As of now, MEE6 and Tatsu are supported. Most bots don't document their APIs and it's therefore difficult to add new bots, so no guarantees are made; however we do try to add new bots to this library.
+As of now, MEE6, Lurkr, and Tatsu are supported. Most bots don't document their APIs and it's therefore difficult to add new bots, so no guarantees are made; however we do try to add new bots to this library.
 
 **Bots are selected using integers** when calling `GetLeaderboard`. You can check int-bot associations by looking at the exported `SupportedBots` enum. Or just look at it here:
 
@@ -60,6 +68,7 @@ As of now, MEE6 and Tatsu are supported. Most bots don't document their APIs and
 export enum SupportedBots {
   MEE6 = 0,
   TATSU = 1,
+  LURKR = 2,
 }
 ```
 
@@ -78,6 +87,18 @@ You need an API key, obtained from [this link](https://dev.tatsu.gg/api/referenc
 ```ts
 new Leveler({ guild: "...", tatsu_api: "123ABC..." });
 ```
+
+#### Lurkr
+
+You need an API key, obtained from [this link](https://lurkr.gg/docs/api#authentication) and passed to the constructor via the `lurkr_api` parameter.
+
+```ts
+new Leveler({ guild: "...", lurkr_api: "123ABC..." });
+```
+
+Additionally, you need to grant specific permissions for the server you want to import from. Check the same link, it describes this immediately after explaining how to get your API key.
+
+Lastly, you need to manually change `Choose the visibility for the web leaderboard` in Lurkr's dashboard to `Public`.
 
 <!-- #### Atlas
 

@@ -1,3 +1,4 @@
+import { LURKRGetLeaderboard } from "./lurkr.js";
 import { MEE6GetLeaderboard } from "./mee6.js";
 import { TATSUGetLeaderboard } from "./tatsu.js";
 
@@ -34,8 +35,13 @@ export interface BaseUserLevels {
  * @interface FullUserLevels
  */
 export interface FullUserLevels extends BaseUserLevels {
-  /** Current XP **relative to the level**. */
-  current_lvl_xp: number;
+  /** Current XP **relative to the level**.
+   *
+   * Not all APIs return this, therefore it's optional.
+   *
+   * @deprecated Should've thought about this when initially designing the API. Next major release will probably just remove this property entirely, as it's not that useful anyway. Try not to depend on it.
+   */
+  current_lvl_xp?: number;
   /** Current level. */
   lvl: number;
   /** XP required to level up. */
@@ -52,18 +58,21 @@ export function SUPPORTS_LEVELS(a: any): a is FullUserLevels {
  *
  * ```ts
  * MEE6 = 0,
- * TATSU = 1
+ * TATSU = 1,
+ * LURKR = 2,
  * ```
  * @enum {number}
  */
 export enum SupportedBots {
   MEE6 = 0,
   TATSU = 1,
+  LURKR = 2,
 }
 
 export class Leveler {
   private guild: string;
   private tatsu_api: string | null = null;
+  private lurkr_api: string | null = null;
 
   /**
    * Creates an instance of a Leveler, with which you'll be able to import leveling data from supported bots.
@@ -71,22 +80,25 @@ export class Leveler {
    * @constructor
    * @param {string} guild Guild ID.
    * @param {?string} tatsu_api If importing from Tatsu, you need to bring in your own API key. This is free and pretty easy to get from the Tatsu bot itself.
+   * @param {?string} lurkr_api If importing from Tatsu, you need to bring in your own API key. This is free and pretty easy to get from the Tatsu bot itself.
    */
-  constructor(options: { guild: string; tatsu_api?: string }) {
+  constructor(options: {
+    guild: string;
+    tatsu_api?: string;
+    lurkr_api?: string;
+  }) {
     this.guild = options.guild;
     if (options.tatsu_api) this.tatsu_api = options.tatsu_api;
+    if (options.lurkr_api) this.lurkr_api = options.lurkr_api;
   }
 
-  /** Gets the whole server leaderboard from MEE6. Throws if unable to get it. */
+  /** Gets the whole server leaderboard from a supported bot. Throws if unable to get it. */
   public async GetLeaderboard(
-    target: SupportedBots.MEE6,
-  ): Promise<FullUserLevels[]>;
-  /** Gets the whole server leaderboard from Tatsu. Throws if unable to get it. */
-  public async GetLeaderboard(target: SupportedBots.TATSU): Promise<BaseUserLevels[]>;
-  public async GetLeaderboard(target: SupportedBots): Promise<BaseUserLevels[] | FullUserLevels[]> {
+    target: SupportedBots,
+  ): Promise<BaseUserLevels[] | FullUserLevels[]> {
     if (target === SupportedBots.MEE6) {
       const levels = await MEE6GetLeaderboard(this.guild);
-      return levels.map(u => {
+      return levels.map((u) => {
         return {
           uid: u.id,
           lvl: u.level,
@@ -95,14 +107,24 @@ export class Leveler {
           next_lvl_xp: u.xp.levelXp,
         };
       });
-    } else {
-      const levels = await TATSUGetLeaderboard(this.tatsu_api, this.guild);
-      return levels.rankings.map(r => {
+    } else if (target === SupportedBots.LURKR) {
+      const levels = await LURKRGetLeaderboard(this.lurkr_api, this.guild);
+      return levels.map((u) => {
         return {
-          uid: r.user_id,
-          current_xp: r.score,
+          uid: u.userId,
+          lvl: u.level,
+          current_xp: u.xp,
+          next_lvl_xp: u.nextLevelXp,
         };
       });
-    } 
+    } else {
+      const levels = await TATSUGetLeaderboard(this.tatsu_api, this.guild);
+      return levels.rankings.map((u) => {
+        return {
+          uid: u.user_id,
+          current_xp: u.score,
+        };
+      });
+    }
   }
 }
