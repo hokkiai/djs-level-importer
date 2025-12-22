@@ -1,7 +1,12 @@
-# `djs-level-importer`
-
-An open, JavaScript-based library to import leveling data from MEE6 and other bots.
-Made jointly by the [Sokora](https://sokora.org) and [Hokki](https://www.hokki.app) Discord bots.
+<div align="center">
+<br><h1>Discord Level Importer</h1>
+  <br>An open, JavaScript-based library for importing leveling data from MEE6 and other bots.<br>
+  <br><br><a href="https://www.hokki.app"><img height="50" src="https://github.com/hokkiai/djs-level-importer/blob/main/assets/sokoraXhokki.png?raw=true"></a>
+  <br>Made jointly by the <a href="https://sokora.org">Sokora</a> and <a href="https://www.hokki.app">Hokki</a> Discord bots.
+</div>
+<br>
+<br>
+<br>
 
 ## Usage
 
