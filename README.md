@@ -1,10 +1,9 @@
 <div align="center">
 <br><h1>Discord Level Importer</h1>
   <br>An open, JavaScript-based library for importing leveling data from MEE6 and other bots.<br>
-  <br><br><a href="https://www.hokki.app"><img height="100" src="https://github.com/hokkiai/djs-level-importer/blob/master/assets/sokoraXhokki.png?raw=true"></a>
+  <br><br><a href="https://www.hokki.app"><img height="100" src="https://raw.githubusercontent.com/hokkiai/djs-level-importer/refs/heads/master/assets/sokoraXhokki.png?raw=true"></a>
   <br>Made jointly by the <a href="https://sokora.org">Sokora</a> and <a href="https://www.hokki.app">Hokki</a> Discord bots.
 </div>
-<br>
 <br>
 <br>
 
