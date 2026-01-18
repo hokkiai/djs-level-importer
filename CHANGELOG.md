@@ -1,5 +1,11 @@
 # DJS Level Importer changelog
 
+## 1.2.0
+
+- Added bots:
+  - **Amari** (grants `BaseUserLevels`, including `current_xp`)
+  - (We probably will rework the way data is returned in a future release)
+
 ## 1.1.0
 
 - Added bots:

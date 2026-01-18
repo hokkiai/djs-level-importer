@@ -74,6 +74,7 @@ export enum SupportedBots {
   MEE6 = 0,
   TATSU = 1,
   LURKR = 2,
+  AMARI = 3,
 }
 ```
 
@@ -108,6 +109,16 @@ Lastly, you need to manually change `Choose the visibility for the web leaderboa
 <!-- #### Atlas
 
 Nothing is required. -->
+
+#### Amari
+
+You need an API key, obtained by manually requesting it from Amari's Discord server at [this link](https://amaribot.com/support) and passed to the constructor via the `amari_api` parameter.
+
+```ts
+new Leveler({ guild: "...", amari_api: "123ABC..." });
+```
+
+> It's worth noting we tried to get it ourselves to test and were told that they're currently not issuing API keys as they're redoing the system or something like that.
 
 ## Credits and license
 
