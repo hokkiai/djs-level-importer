@@ -64,9 +64,9 @@ This interface division is not the most intuitive, but the best thing we can do 
 
 ## Bot support
 
-As of now, MEE6, Lurkr, and Tatsu are supported. Most bots don't document their APIs and it's therefore difficult to add new bots, so no guarantees are made; however we do try to add new bots to this library.
+As of now, MEE6, Lurkr, Tatsu and Amari are supported. Most bots don't document their APIs and it's therefore difficult to add new bots, so no guarantees are made; however we do try to add new bots to this library. You can check `TODO.txt` at the root of this repo for a list of planned (or discarded) bots, and you may suggest any bot you know about that isn't listed there by opening an issue.
 
-**Bots are selected using integers** when calling `GetLeaderboard`. You can check int-bot associations by looking at the exported `SupportedBots` enum. Or just look at it here:
+**Bots are selected using integers** when calling `GetLeaderboard`. You can check integer-bot associations by looking at the exported `SupportedBots` TypeScript enum. Or just look at it here:
 
 ```ts
 export enum SupportedBots {
