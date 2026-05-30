@@ -1,6 +1,3 @@
-// thanks tatsu for caring to make a package
-import { GuildRankings, Tatsu } from "tatsu";
-
 /**
  * Get the leaderboard of a guild.
  *
@@ -12,8 +9,20 @@ import { GuildRankings, Tatsu } from "tatsu";
 export async function TATSUGetLeaderboard(
   tkn: string | null,
   guildId: string,
-): Promise<GuildRankings> {
-  if (!tkn) throw "No Tatsu API key provided. Cannot use Tatsu API.";
-  const tatsu = new Tatsu(tkn);
-  return await tatsu.getGuildRankings(guildId);
+): Promise<{ score: number; user_id: string }[]> {
+  if (!tkn) throw new Error("No Tatsu API key provided. Cannot use Tatsu API.");
+  const resp = await fetch(
+    `https://api.tatsu.gg/v1/guilds/${guildId}/rankings/all`,
+    {
+      method: "GET",
+      headers: {
+        Authorization: tkn,
+      },
+    },
+  );
+  const result: { rankings: { score: number; user_id: string }[] } =
+    await resp.json();
+  if (!resp.ok)
+    throw new Error((result as unknown as { message: string }).message);
+  return result.rankings;
 }

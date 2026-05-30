@@ -1,9 +1,9 @@
-type LeaderboardEntry = {
+interface LeaderboardEntry {
   id: string;
   username: string;
   exp: string;
   level: number;
-};
+}
 
 /**
  * Get the leaderboard of a guild.
@@ -19,7 +19,7 @@ export async function AMARIGetLeaderboard(
 ): Promise<LeaderboardEntry[]> {
   let pg = 0;
   const values: LeaderboardEntry[] = [];
-  if (!tkn) throw "No Amari API key provided. Cannot use Amari API.";
+  if (!tkn) throw new Error("No Amari API key provided. Cannot use Amari API.");
   while (true) {
     const resp = await fetch(
       `https://amaribot.com/api/v1/guild/leaderboard/${guildId}?page=${pg}&limit=200`,

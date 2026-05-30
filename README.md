@@ -37,30 +37,18 @@ export interface BaseUserLevels {
   current_xp: number;
 }
 
-export interface FullUserLevels extends BaseUserLevels {
-  /** Current XP **relative to the level**.
-   *
-   * Not all APIs return this, therefore it's optional.
-   */
-  current_lvl_xp?: number;
+export interface StandardUserLevels extends BaseUserLevels {
   /** Current level. */
   lvl: number;
-  /** XP required to level up. */
-  next_lvl_xp: number;
 }
 ```
 
 > [!IMPORTANT]
-> You'll be returned **`BaseUserLevels`** objects when importing data from **Tatsu** and **`FullUserLevels`** ones when importing from **MEE6** or **Lurkr**.
+> You'll be returned **`BaseUserLevels`** objects when importing data from **Tatsu** and **`StandardUserLevels`** ones when importing from other bots.
 
-This interface division is not the most intuitive, but the best thing we can do to provide you with all _possible_ data despite Tatsu not providing these extra fields that other bots provide.
+This interface division is the best thing we can do to provide you with all _possible_ data despite Tatsu not providing these extra fields that other bots provide.
 
 **Bear in mind that extensions to bot support may or may not result in breaking changes to these interfaces** (we'll try to avoid them as much as we can).
-
-> [!CAUTION]
-> About already planned breaking changes:
->
-> - The `current_lvl_xp` property wasn't too well thought and we'll probably remove it (by the next major, to comply with SemVer). Avoid depending on it.
 
 ## Bot support
 
@@ -105,10 +93,6 @@ Additionally, you need to grant specific permissions for the server you want to 
 
 Lastly, you need to manually change `Choose the visibility for the web leaderboard` in Lurkr's dashboard to `Public`.
 
-<!-- #### Atlas
-
-Nothing is required. -->
-
 #### Amari
 
 You need an API key, obtained by manually requesting it from Amari's Discord server at [this link](https://amaribot.com/support) and passed to the constructor via the `amari_api` parameter.
@@ -121,11 +105,11 @@ new Leveler({ guild: "...", amari_api: "123ABC..." });
 
 ## Credits and license
 
-Originally made by [ZakaHaceCosas](https://zakahacecosas.github.io/) for the [Hokki](https://www.hokki.app) and [Sokora](https://sokora.org) Discord bots. Made open source under the MIT license for everyone to use, so long as our work is attributed (which'd make us really happy as reverse engineering some APIs was a true pain, to be fair).
+Originally made by [ZakaHaceCosas](https://me.zhc.es/) for the [Sokora](https://sokora.org) and [Hokki](https://www.hokki.app) Discord bots. Made open source under the MIT license for everyone to use, so long as our work is attributed (which'd make us really happy as reverse engineering some APIs was a true pain, to be fair).
 
 ---
 
-Copyright (c) 2025 ZakaHaceCosas
+Copyright (c) 2025 Zakaria B. ("@ZakaHaceCosas")
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 

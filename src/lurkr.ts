@@ -15,20 +15,20 @@ export interface LURKRResponse {
     rank: number;
     user: {
       accentColour: string | null;
-    } & any;
+    };
     userId: string;
     xp: number;
   }[];
   multipliers: {
     id: string;
     multiplier: number;
-    targets: any[];
+    targets: unknown[];
     type: "Channel" | "Role";
   }[];
   roleRewards: {
     id: string;
     level: number;
-    roles: any[];
+    roles: unknown[];
   }[];
   vanity: string | null;
   /**
@@ -58,7 +58,7 @@ export async function LURKRGetLeaderboard(
   tkn: string | null,
   guildId: string,
 ): Promise<LURKRResponse["levels"]> {
-  if (!tkn) throw "No Lurkr API key provided. Cannot use Lurkr API.";
+  if (!tkn) throw new Error("No Lurkr API key provided. Cannot use Lurkr API.");
   const leaderboard: LURKRResponse["levels"] = [];
   let pageNumber = 1;
   while (true) {
@@ -68,9 +68,11 @@ export async function LURKRGetLeaderboard(
         method: "GET",
       },
     );
-    const content: LURKRResponse = (await page.json()) as any;
+    const content: LURKRResponse = await page.json();
     if (!page.ok)
-      throw `Failed to import from Lurkr: ${(content as any).message}`;
+      throw new Error(
+        `Failed to import from Lurkr: ${(content as unknown as { message: string }).message}`,
+      );
     leaderboard.push(...content.levels);
     if (content.levels.length < 1000) break;
     pageNumber += 1;

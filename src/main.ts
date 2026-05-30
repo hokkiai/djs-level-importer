@@ -13,9 +13,7 @@ export type Identifier = string | { id: string };
  * @returns {string} Resolved ID
  */
 export function GET_ID(id: Identifier): string {
-  if (typeof id === "string") return id;
-  else if (typeof id.id === "string") return id.id;
-  else throw new Error("Invalid Identifier specified: " + id);
+  return typeof id === "string" ? id : id.id;
 }
 
 /**
@@ -31,27 +29,32 @@ export interface BaseUserLevels {
 }
 
 /**
- * A user's leveling information, in a common format **with levels and rank up**.
+ * A user's leveling information, in a common format **with levels**.
  *
- * @interface FullUserLevels
+ * @interface StandardUserLevels
  */
-export interface FullUserLevels extends BaseUserLevels {
-  /** Current XP **relative to the level**.
-   *
-   * Not all APIs return this, therefore it's optional.
-   *
-   * @deprecated Should've thought about this when initially designing the API. Next major release will probably just remove this property entirely, as it's not that useful anyway. Try not to depend on it.
-   */
-  current_lvl_xp?: number;
+export interface StandardUserLevels extends BaseUserLevels {
   /** Current level. */
   lvl: number;
-  /** XP required to level up. */
-  next_lvl_xp: number;
+}
+
+/**
+ * A user's leveling information, in a common format **with levels and level rewards**.
+ *
+ * @interface StandardUserLevels
+ * @deprecated Internal only.
+ */
+export interface FullUserLevels extends StandardUserLevels {
+  /** Level rewards. Each rewards is defined as `[required level, reward type, reward content]`.
+   */
+  rewards: [number, SupportedRewards, string][];
 }
 
 /** Type-guards if you're on MEE6, basically. */
-export function SUPPORTS_LEVELS(a: any): a is FullUserLevels {
-  return a.lvl && a.lvl !== undefined && typeof a.lvl === "number";
+export function SUPPORTS_LEVELS(
+  a: BaseUserLevels | StandardUserLevels,
+): a is StandardUserLevels {
+  return "lvl" in a && a.lvl !== undefined && typeof a.lvl === "number";
 }
 
 /**
@@ -70,6 +73,14 @@ export enum SupportedBots {
   TATSU = 1,
   LURKR = 2,
   AMARI = 3,
+}
+
+/**
+ * @deprecated Internal only.
+ */
+enum SupportedRewards {
+  CHANNEL,
+  ROLE,
 }
 
 export class Leveler {
@@ -102,16 +113,14 @@ export class Leveler {
   /** Gets the whole server leaderboard from a supported bot. Throws if unable to get it. */
   public async GetLeaderboard(
     target: SupportedBots,
-  ): Promise<BaseUserLevels[] | FullUserLevels[]> {
-    if (target === SupportedBots.MEE6) {
+  ): Promise<BaseUserLevels[] | StandardUserLevels[]> {
+    if (target == SupportedBots.MEE6) {
       const levels = await MEE6GetLeaderboard(this.guild);
       return levels.map((u) => {
         return {
           uid: u.id,
           lvl: u.level,
           current_xp: u.xp.totalXp,
-          current_lvl_xp: u.xp.userXp,
-          next_lvl_xp: u.xp.levelXp,
         };
       });
     } else if (target === SupportedBots.LURKR) {
@@ -121,7 +130,6 @@ export class Leveler {
           uid: u.userId,
           lvl: u.level,
           current_xp: u.xp,
-          next_lvl_xp: u.nextLevelXp,
         };
       });
     } else if (target === SupportedBots.AMARI) {
@@ -135,7 +143,7 @@ export class Leveler {
       });
     } else {
       const levels = await TATSUGetLeaderboard(this.tatsu_api, this.guild);
-      return levels.rankings.map((u) => {
+      return levels.map((u) => {
         return {
           uid: u.user_id,
           current_xp: u.score,

@@ -1,4 +1,5 @@
-import { GET_ID, Identifier } from "./main.js";
+import type { Identifier } from "./main.js";
+import { GET_ID } from "./main.js";
 
 interface MEE6User {
   id: string;
@@ -19,29 +20,39 @@ interface MEE6User {
  */
 async function getLeaderboardPage(
   guild: Identifier,
-  limit: number = 1000,
-  page: number = 0,
+  limit = 1000,
+  page = 0,
 ): Promise<MEE6User[]> {
   const guildId = GET_ID(guild);
   const response = await fetch(
     `https://mee6.xyz/api/plugins/levels/leaderboard/${guildId}?limit=${limit}&page=${page}`,
     { method: "GET" },
   );
-  const j = (await response.json()) as any;
+  const index: {
+    error?: { message?: string };
+    players: MEE6User[];
+  } = await response.json();
   if (response.status !== 200) {
-    if (j.error && j.error.message)
-      throw new Error(`${response.status}: ${j.error.message}`);
-    else throw new Error(`${response.status}: ${response.statusText}`);
+    const error = index.error?.message
+      ? new Error(`${response.status}: ${index.error.message}`)
+      : new Error(`${response.status}: ${response.statusText}`);
+    throw error;
   }
-  return j.players.map((user: any) => {
-    const { id, level } = user;
-    const [userXp, levelXp, totalXp] = user.detailed_xp;
-    return {
-      id,
-      level,
-      xp: { userXp, levelXp, totalXp },
-    };
-  });
+  return index.players.map(
+    (user: {
+      id: string;
+      level: number;
+      detailed_xp: [number, number, number];
+    }): MEE6User => {
+      const { id, level } = user;
+      const [userXp, levelXp, totalXp] = user.detailed_xp;
+      return {
+        id,
+        level,
+        xp: { userXp, levelXp, totalXp },
+      };
+    },
+  );
 }
 
 /**

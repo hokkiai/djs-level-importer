@@ -1,31 +1,26 @@
 {
   "name": "@hokkiai/djs-level-importer",
-  "version": "1.2.0",
-  "description": "An open, JavaScript-based library to import leveling data from MEE6 and other bots. Made jointly by the Sokora and Hokki Discord bots.",
-  "type": "module",
-  "homepage": "https://github.com/hokkiai/djs-level-importer",
+  "version": "2.0.0",
+  "author": {
+    "name": "ZakaHaceCosas",
+    "email": "zakahacecosas@protonmail.com",
+    "url": "https://me.zhc.es/"
+  },
   "main": "./dist/main.js",
-  "types": "./dist/main.d.ts",
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/bun": "latest",
+    "eslint": "^10.4.1",
+    "eslint-plugin-unicorn": "^64.0.0",
+    "prettier": "^3.8.3",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.60.0"
+  },
   "exports": {
     ".": {
       "import": "./dist/main.js",
       "types": "./dist/main.d.ts"
     }
-  },
-  "keywords": [
-    "discord",
-    "discord.js",
-    "levels",
-    "importer",
-    "discord leveling"
-  ],
-  "files": [
-    "dist"
-  ],
-  "author": {
-    "name": "ZakaHaceCosas",
-    "email": "zakahacecosas@protonmail.com",
-    "url": "https://zakahacecosas.github.io"
   },
   "contributors": [
     {
@@ -37,17 +32,23 @@
       "url": "https://www.hokki.app"
     }
   ],
+  "description": "An open, JavaScript-based library to import leveling data from MEE6 and other bots. Made jointly by the Sokora and Hokki Discord bots.",
+  "files": [
+    "dist"
+  ],
+  "homepage": "https://github.com/hokkiai/djs-level-importer",
+  "keywords": [
+    "discord",
+    "discord.js",
+    "levels",
+    "importer",
+    "discord leveling"
+  ],
+  "license": "MIT",
   "scripts": {
     "build": "tsc",
     "prettier": "prettier --w ."
   },
-  "license": "MIT",
-  "dependencies": {
-    "tatsu": "latest"
-  },
-  "devDependencies": {
-    "@types/bun": "latest",
-    "prettier": "^3.7.4",
-    "typescript": "^5.9.3"
-  }
+  "type": "module",
+  "types": "./dist/main.d.ts"
 }
