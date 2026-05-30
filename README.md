@@ -50,6 +50,8 @@ This interface division is the best thing we can do to provide you with all _pos
 
 **Bear in mind that extensions to bot support may or may not result in breaking changes to these interfaces** (we'll try to avoid them as much as we can).
 
+A method to get level rewards created with a bot doesn't yet exist but might get implemented in the future, if bot APIs allow for it.
+
 ## Bot support
 
 As of now, MEE6, Lurkr, Tatsu and Amari are supported. Most bots don't document their APIs and it's therefore difficult to add new bots, so no guarantees are made; however we do try to add new bots to this library. You can check `TODO.txt` at the root of this repo for a list of planned (or discarded) bots, and you may suggest any bot you know about that isn't listed there by opening an issue.
@@ -75,7 +77,7 @@ You need to enable leaderboard visibility from your dashboard. Open the leaderbo
 
 #### Tatsu
 
-You need an API key, obtained from [this link](https://dev.tatsu.gg/api/reference#authentication) and passed to the constructor via the `tatsu_api` parameter.
+You need an API key, obtained from [dev.tatsu.gg](https://dev.tatsu.gg/api/reference#authentication) and passed to the constructor via the `tatsu_api` parameter.
 
 ```ts
 new Leveler({ guild: "...", tatsu_api: "123ABC..." });
@@ -83,7 +85,7 @@ new Leveler({ guild: "...", tatsu_api: "123ABC..." });
 
 #### Lurkr
 
-You need an API key, obtained from [this link](https://lurkr.gg/docs/api#authentication) and passed to the constructor via the `lurkr_api` parameter.
+You need an API key, obtained from [lurkr.gg](https://lurkr.gg/docs/api#authentication) and passed to the constructor via the `lurkr_api` parameter.
 
 ```ts
 new Leveler({ guild: "...", lurkr_api: "123ABC..." });
@@ -101,6 +103,7 @@ You need an API key, obtained by manually requesting it from Amari's Discord ser
 new Leveler({ guild: "...", amari_api: "123ABC..." });
 ```
 
+> [!NOTE]
 > It's worth noting we tried to get it ourselves to test and were told that they're currently not issuing API keys as they're redoing the system or something like that.
 
 ## Credits and license

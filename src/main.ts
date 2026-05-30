@@ -68,7 +68,7 @@ export function SUPPORTS_LEVELS(
  * ```
  * @enum {number}
  */
-export enum SupportedBots {
+export const enum SupportedBots {
   MEE6 = 0,
   TATSU = 1,
   LURKR = 2,

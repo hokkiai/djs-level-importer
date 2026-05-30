@@ -25,10 +25,12 @@
   "contributors": [
     {
       "name": "The Sokora Discord bot",
+      "email": "info@sokora.org",
       "url": "https://sokora.org"
     },
     {
       "name": "The Hokki Discord bot",
+      "email": "support@hokki.app",
       "url": "https://www.hokki.app"
     }
   ],
@@ -41,13 +43,18 @@
     "discord",
     "discord.js",
     "levels",
-    "importer",
+    "leveling",
+    "discord levels",
     "discord leveling"
   ],
   "license": "MIT",
   "scripts": {
     "build": "tsc",
     "prettier": "prettier --w ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hokkiai/djs-level-importer.git"
   },
   "type": "module",
   "types": "./dist/main.d.ts"
