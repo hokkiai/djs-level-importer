@@ -1,6 +1,6 @@
 import { AMARIGetLeaderboard } from "./amari.js";
 import { LURKRGetLeaderboard } from "./lurkr.js";
-import { MEE6GetLeaderboard } from "./mee6.js";
+import { MEE6GetLeaderboard, MEE6GetRewards } from "./mee6.js";
 import { TATSUGetLeaderboard } from "./tatsu.js";
 
 /** A user/guild ID. MEE6 has a slightly inconsistent way of telling you this, as far as I know. */
@@ -17,44 +17,33 @@ export function GET_ID(id: Identifier): string {
 }
 
 /**
- * A user's leveling information, in a common format **with minimal data**. Required for compat with lesser capable bots like Tatsu.
+ * A user's leveling information, in a common format **with levels**.
  *
- * @interface BaseUserLevels
+ * @interface UserLevels
  */
-export interface BaseUserLevels {
+export interface UserLevels {
   /** User ID. */
   uid: string;
   /** Current XP **in total**. */
   current_xp: number;
+  /** Current level. Might be `undefined` on minimal leveling bots (i.e. Tatsu). */
+  lvl?: number;
 }
 
 /**
- * A user's leveling information, in a common format **with levels**.
+ * A server's level rewards in a common format.
  *
- * @interface StandardUserLevels
+ * @interface LevelRewards
  */
-export interface StandardUserLevels extends BaseUserLevels {
-  /** Current level. */
+export interface LevelRewards {
+  /** Level at which the reward is granted. */
   lvl: number;
-}
-
-/**
- * A user's leveling information, in a common format **with levels and level rewards**.
- *
- * @interface StandardUserLevels
- * @deprecated Internal only.
- */
-export interface FullUserLevels extends StandardUserLevels {
-  /** Level rewards. Each rewards is defined as `[required level, reward type, reward content]`.
+  /** Role IDs. */
+  roles: string[];
+  /** Channel IDs.
+   * IMPORTANT: This is always empty.
    */
-  rewards: [number, SupportedRewards, string][];
-}
-
-/** Type-guards if you're on MEE6, basically. */
-export function SUPPORTS_LEVELS(
-  a: BaseUserLevels | StandardUserLevels,
-): a is StandardUserLevels {
-  return "lvl" in a && a.lvl !== undefined && typeof a.lvl === "number";
+  channels: string[];
 }
 
 /**
@@ -68,7 +57,7 @@ export function SUPPORTS_LEVELS(
  * ```
  * @enum {number}
  */
-export const enum SupportedBots {
+export const enum Supported {
   MEE6 = 0,
   TATSU = 1,
   LURKR = 2,
@@ -76,11 +65,14 @@ export const enum SupportedBots {
 }
 
 /**
- * @deprecated Internal only.
+ * Supported Discord bots for which you may also get level rewards
+ *
+ * ```ts
+ * MEE6 = 0
+ * ```
  */
-enum SupportedRewards {
-  CHANNEL,
-  ROLE,
+export const enum SupportedAndRewarded {
+  MEE6 = 0,
 }
 
 export class Leveler {
@@ -111,10 +103,8 @@ export class Leveler {
   }
 
   /** Gets the whole server leaderboard from a supported bot. Throws if unable to get it. */
-  public async GetLeaderboard(
-    target: SupportedBots,
-  ): Promise<BaseUserLevels[] | StandardUserLevels[]> {
-    if (target == SupportedBots.MEE6) {
+  public async GetLeaderboard(target: Supported): Promise<UserLevels[]> {
+    if (target == Supported.MEE6) {
       const levels = await MEE6GetLeaderboard(this.guild);
       return levels.map((u) => {
         return {
@@ -123,7 +113,7 @@ export class Leveler {
           current_xp: u.xp.totalXp,
         };
       });
-    } else if (target === SupportedBots.LURKR) {
+    } else if (target === Supported.LURKR) {
       const levels = await LURKRGetLeaderboard(this.lurkr_api, this.guild);
       return levels.map((u) => {
         return {
@@ -132,7 +122,7 @@ export class Leveler {
           current_xp: u.xp,
         };
       });
-    } else if (target === SupportedBots.AMARI) {
+    } else if (target === Supported.AMARI) {
       const levels = await AMARIGetLeaderboard(this.amari_api, this.guild);
       return levels.map((u) => {
         return {
@@ -150,5 +140,21 @@ export class Leveler {
         };
       });
     }
+  }
+
+  /** Gets the server's level rewards from a supported bot. Throws if unable to get them. */
+  public async GetRewards(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    _target: SupportedAndRewarded,
+  ): Promise<LevelRewards[]> {
+    const rewards = await MEE6GetRewards(this.guild);
+
+    return rewards.map((r) => {
+      return {
+        lvl: r.rank,
+        roles: [r.role.id],
+        channels: [],
+      };
+    });
   }
 }

@@ -20,8 +20,9 @@ export async function TATSUGetLeaderboard(
       },
     },
   );
-  const result: { rankings: { score: number; user_id: string }[] } =
-    await resp.json();
+  const result = (await resp.json()) as {
+    rankings: { score: number; user_id: string }[];
+  };
   if (!resp.ok)
     throw new Error((result as unknown as { message: string }).message);
   return result.rankings;

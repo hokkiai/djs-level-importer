@@ -68,7 +68,7 @@ export async function LURKRGetLeaderboard(
         method: "GET",
       },
     );
-    const content: LURKRResponse = await page.json();
+    const content = (await page.json()) as LURKRResponse;
     if (!page.ok)
       throw new Error(
         `Failed to import from Lurkr: ${(content as unknown as { message: string }).message}`,

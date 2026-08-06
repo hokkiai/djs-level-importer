@@ -11,48 +11,64 @@ interface MEE6User {
   };
 }
 
-/**
- * Get a page of the leaderboard of a guild.
- * @param {Identifier} guild Guild to get the leaderboard from.
- * @param {number} limit Limit of users to fetch per page. Maximum 1000.
- * @param {number} page Number of pages to skip.
- * @returns {Promise<MEE6User[]>} Leaderboard page.
- */
-async function getLeaderboardPage(
+interface API_MEE6User {
+  id: string;
+  level: number;
+  detailed_xp: [number, number, number];
+  message_count: number;
+  xp: number;
+}
+
+interface API_MEE6Reward {
+  rank: number;
+  role: {
+    id: string;
+  };
+}
+
+async function fetchMee6(
   guild: Identifier,
   limit = 1000,
   page = 0,
-): Promise<MEE6User[]> {
+): Promise<{
+  error?: { message?: string };
+  players: API_MEE6User[];
+  role_rewards: API_MEE6Reward[];
+}> {
   const guildId = GET_ID(guild);
   const response = await fetch(
     `https://mee6.xyz/api/plugins/levels/leaderboard/${guildId}?limit=${limit}&page=${page}`,
     { method: "GET" },
   );
-  const index: {
+  const index = (await response.json()) as {
     error?: { message?: string };
-    players: MEE6User[];
-  } = await response.json();
+    players: API_MEE6User[];
+    role_rewards: API_MEE6Reward[];
+  };
   if (response.status !== 200) {
     const error = index.error?.message
       ? new Error(`${response.status}: ${index.error.message}`)
       : new Error(`${response.status}: ${response.statusText}`);
     throw error;
   }
-  return index.players.map(
-    (user: {
-      id: string;
-      level: number;
-      detailed_xp: [number, number, number];
-    }): MEE6User => {
-      const { id, level } = user;
-      const [userXp, levelXp, totalXp] = user.detailed_xp;
-      return {
-        id,
-        level,
-        xp: { userXp, levelXp, totalXp },
-      };
-    },
-  );
+  return index;
+}
+
+async function getLeaderboardPage(
+  guild: Identifier,
+  limit = 1000,
+  page = 0,
+): Promise<MEE6User[]> {
+  const index = await fetchMee6(guild, limit, page);
+  return index.players.map((user): MEE6User => {
+    const { id, level } = user;
+    const [userXp, levelXp, totalXp] = user.detailed_xp;
+    return {
+      id,
+      level,
+      xp: { userXp, levelXp, totalXp },
+    };
+  });
 }
 
 /**
@@ -72,4 +88,16 @@ export async function MEE6GetLeaderboard(
     pageNumber += 1;
   }
   return leaderboard;
+}
+
+/**
+ * Get the level rewards of a guild.
+ * @param {Identifier} guild Guild to get the leaderboard from.
+ * @returns {Promise<API_MEE6Reward[]>} Leaderboard of the guild.
+ */
+export async function MEE6GetRewards(
+  guild: Identifier,
+): Promise<API_MEE6Reward[]> {
+  const index = await fetchMee6(guild, 1, 1);
+  return index.role_rewards;
 }

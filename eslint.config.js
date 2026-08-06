@@ -4,14 +4,18 @@ import unicorn from "eslint-plugin-unicorn";
 import { defineConfig } from "eslint/config";
 
 export default defineConfig(
+  {
+    ignores: ["eslint.config.js"],
+  },
   eslint.configs.recommended,
   tseslint.configs.strictTypeChecked,
   tseslint.configs.stylisticTypeChecked,
   unicorn.configs.recommended,
   {
+    files: ["**/*.ts"],
     languageOptions: {
       parserOptions: {
-        project: "./tsconfig.json",
+        projectService: true,
         tsconfigRootDir: import.meta.dirname,
       },
     },

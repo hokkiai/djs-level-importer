@@ -3,7 +3,6 @@
   "version": "2.0.0",
   "author": {
     "name": "ZakaHaceCosas",
-    "email": "zakahacecosas@protonmail.com",
     "url": "https://me.zhc.es/"
   },
   "main": "./dist/main.js",
@@ -50,6 +49,7 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc",
+    "lint": "eslint . && tsc --noEmit",
     "prettier": "prettier --w ."
   },
   "repository": {

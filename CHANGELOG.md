@@ -3,7 +3,9 @@
 ## 2.0.0 (unreleased)
 
 - Breaking changes:
-  - Reworked a bit the data return types. Breaking. Now `FullUserLevels` is `StandardUserLevels` (and properties `current_lvl_xp` and `next_lvl_xp` are gone), with `FullUserLevels` becoming a new interface with `rewards` property (not yet in use).
+  - Reworked a bit the data return types. Breaking. Now everything returns the same `UserLevels` interface.
+- Added:
+  - Level rewards import from MEE6.
 - Changed:
   - Now the package is zero-dependency while still supporting all bots. Install ~75% smaller.
 

@@ -27,45 +27,53 @@ const leveler = new Leveler({
 const leveling_data = await leveler.GetLeaderboard(0);
 ```
 
-You will be given an array of objects matching either of these interfaces:
+You will be given an array of objects matching this interface:
 
 ```ts
-export interface BaseUserLevels {
+export interface UserLevels {
   /** User ID. */
   uid: string;
   /** Current XP **in total**. */
   current_xp: number;
-}
-
-export interface StandardUserLevels extends BaseUserLevels {
-  /** Current level. */
-  lvl: number;
+  /** Current level. Might be `undefined` on minimal leveling bots (i.e. Tatsu). */
+  lvl?: number;
 }
 ```
 
 > [!IMPORTANT]
-> You'll be returned **`BaseUserLevels`** objects when importing data from **Tatsu** and **`StandardUserLevels`** ones when importing from other bots.
+> `UserLevels.lvl` will be `undefined` for Tatsu.
 
-This interface division is the best thing we can do to provide you with all _possible_ data despite Tatsu not providing these extra fields that other bots provide.
+After that, you might want to import level rewards too. Use `GetRewards` for that.
 
-**Bear in mind that extensions to bot support may or may not result in breaking changes to these interfaces** (we'll try to avoid them as much as we can).
+```ts
+const rewards = await leveler.GetLeaderboard(0);
+```
 
-A method to get level rewards created with a bot doesn't yet exist but might get implemented in the future, if bot APIs allow for it.
+You'll be returned an array of these:
+
+```ts
+export interface LevelRewards {
+  /** Level at which the reward is granted. */
+  lvl: number;
+  /** Role IDs. */
+  roles: string[];
+  /** Channel IDs.
+   * IMPORTANT: This is always empty.
+   */
+  channels: string[];
+}
+```
+
+> [!IMPORTANT]
+> In practice you cannot get channels, as only MEE6 supports this and it doesn't have channel rewards that we know of.
 
 ## Bot support
 
-As of now, MEE6, Lurkr, Tatsu and Amari are supported. Most bots don't document their APIs and it's therefore difficult to add new bots, so no guarantees are made; however we do try to add new bots to this library. You can check `TODO.txt` at the root of this repo for a list of planned (or discarded) bots, and you may suggest any bot you know about that isn't listed there by opening an issue.
+As of now, MEE6, Lurkr, Tatsu and Amari are supported. Most bots don't document their APIs and it's therefore difficult to add new bots, so no guarantees are made; however we do try to add new bots to this library. You can check [`TODO.md`](./TODO.md) at the root of this repo for a list of planned (or discarded) bots, and you may suggest any bot you know about that isn't listed there by opening an issue.
 
-**Bots are selected using integers** when calling `GetLeaderboard`. You can check integer-bot associations by looking at the exported `SupportedBots` TypeScript enum. Or just look at it here:
+**Bots are selected using integers** when calling `GetLeaderboard` and `GetRewards`. You can check integer-bot associations by looking at the exported `Supported` and `SupportedAndRewarded` TypeScript enums respectively.
 
-```ts
-export enum SupportedBots {
-  MEE6 = 0,
-  TATSU = 1,
-  LURKR = 2,
-  AMARI = 3,
-}
-```
+Level rewards support is much more limited, for which only MEE6 works as of now.
 
 ### Per bot requirements
 
