@@ -1,3 +1,5 @@
+lintScript: "lint"
 prettyScript: "prettier"
 flagless:
   flaglessPretty: true
+  flaglessLint: true

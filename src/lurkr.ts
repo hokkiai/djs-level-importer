@@ -1,3 +1,5 @@
+import type { UserLevels } from "./mod.ts";
+
 /** Lurkr API docs have a "copy TypeScript definitions" for this */
 export interface LURKRResponse {
   guild: {
@@ -57,7 +59,7 @@ export interface LURKRResponse {
 export async function LURKRGetLeaderboard(
   tkn: string | null,
   guildId: string,
-): Promise<LURKRResponse["levels"]> {
+): Promise<UserLevels[]> {
   if (!tkn) throw new Error("No Lurkr API key provided. Cannot use Lurkr API.");
   const leaderboard: LURKRResponse["levels"] = [];
   let pageNumber = 1;
@@ -69,13 +71,23 @@ export async function LURKRGetLeaderboard(
       },
     );
     const content = (await page.json()) as LURKRResponse;
-    if (!page.ok)
+    if (!page.ok) 
       throw new Error(
-        `Failed to import from Lurkr: ${(content as unknown as { message: string }).message}`,
+        `Failed to import from Lurkr: ${
+          (content as unknown as { message: string }).message
+        }`,
       );
+    
+
     leaderboard.push(...content.levels);
     if (content.levels.length < 1000) break;
     pageNumber += 1;
   }
-  return leaderboard;
+  return leaderboard.map((u) => {
+    return {
+      uid: u.userId,
+      lvl: u.level,
+      current_xp: u.xp,
+    };
+  });
 }

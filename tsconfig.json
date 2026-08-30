@@ -30,7 +30,10 @@
     "useUnknownInCatchVariables": true,
     "allowArbitraryExtensions": true,
     "skipLibCheck": true,
-    "lib": ["ESNext"]
+    "lib": ["ESNext"],
+    "types": ["@types/bun"],
+    "allowImportingTsExtensions": true,
+    "noEmit": true
   },
   "include": ["src/", "eslint.config.js"],
   "exclude": ["node_modules/"],

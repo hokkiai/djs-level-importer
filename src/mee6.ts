@@ -1,5 +1,9 @@
-import type { Identifier } from "./main.js";
-import { GET_ID } from "./main.js";
+import {
+  GET_ID,
+  type Identifier,
+  type LevelRewards,
+  type UserLevels,
+} from "./mod.ts";
 
 interface MEE6User {
   id: string;
@@ -78,7 +82,7 @@ async function getLeaderboardPage(
  */
 export async function MEE6GetLeaderboard(
   guild: Identifier,
-): Promise<MEE6User[]> {
+): Promise<UserLevels[]> {
   const leaderboard = [];
   let pageNumber = 0;
   while (true) {
@@ -87,7 +91,13 @@ export async function MEE6GetLeaderboard(
     if (page.length < 1000) break;
     pageNumber += 1;
   }
-  return leaderboard;
+  return leaderboard.map((u) => {
+    return {
+      uid: u.id,
+      lvl: u.level,
+      current_xp: u.xp.totalXp,
+    };
+  });
 }
 
 /**
@@ -97,7 +107,13 @@ export async function MEE6GetLeaderboard(
  */
 export async function MEE6GetRewards(
   guild: Identifier,
-): Promise<API_MEE6Reward[]> {
+): Promise<LevelRewards[]> {
   const index = await fetchMee6(guild, 1, 1);
-  return index.role_rewards;
+  return index.role_rewards.map((r) => {
+    return {
+      lvl: r.rank,
+      roles: [r.role.id],
+      channels: [],
+    };
+  });
 }

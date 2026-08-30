@@ -10,9 +10,12 @@
 > - `^` being worked on, but not actively, so it's not coming anytime soon
 > - `+` likely to be worked on at some point
 > - `?` wanted to implement, but viability is not fully investigated
-> - `-` unlikely to be implemented, but noted here as a known and not-yet-discarded leveling bot
+> - `-` unlikely to be implemented, but noted here as a known and
+>   not-yet-discarded leveling bot
 >
-> `[CANT]` indicates the bot has been discarded due to it being impossible (or too hard) to import, not just by lack of publicly documented API but by failure to reverse engineer it as well
+> `[CANT]` indicates the bot has been discarded due to it being impossible (or
+> too hard) to import, not just by lack of publicly documented API but by
+> failure to reverse engineer it as well
 
 | Status   | Bot     | Notes                                                                                                                                                                                                  |
 | -------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |

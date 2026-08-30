@@ -1,25 +1,18 @@
 {
-  "name": "@hokkiai/djs-level-importer",
-  "version": "2.0.0",
+  "private": true,
+  "name": "@subetedesu/honlvlimport",
   "author": {
     "name": "ZakaHaceCosas",
     "url": "https://me.zhc.es/"
   },
-  "main": "./dist/main.js",
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@types/bun": "latest",
-    "eslint": "^10.4.1",
+    "eslint": "^10.9.1",
     "eslint-plugin-unicorn": "^64.0.0",
-    "prettier": "^3.8.3",
+    "prettier": "^3.9.6",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.60.0"
-  },
-  "exports": {
-    ".": {
-      "import": "./dist/main.js",
-      "types": "./dist/main.d.ts"
-    }
+    "typescript-eslint": "^8.68.0"
   },
   "contributors": [
     {
@@ -34,10 +27,7 @@
     }
   ],
   "description": "An open, JavaScript-based library to import leveling data from MEE6 and other bots. Made jointly by the Sokora and Hokki Discord bots.",
-  "files": [
-    "dist"
-  ],
-  "homepage": "https://github.com/hokkiai/djs-level-importer",
+  "homepage": "https://github.com/sokoradesu/honlvlimport",
   "keywords": [
     "discord",
     "discord.js",
@@ -49,12 +39,12 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc",
-    "lint": "eslint . && tsc --noEmit",
+    "lint": "eslint . --fix && tsc --noEmit",
     "prettier": "prettier --w ."
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/hokkiai/djs-level-importer.git"
+    "url": "git+https://github.com/sokoradesu/honlvlimport.git"
   },
   "type": "module",
   "types": "./dist/main.d.ts"

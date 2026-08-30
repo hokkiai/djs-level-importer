@@ -1,3 +1,5 @@
+import type { UserLevels } from "./mod.ts";
+
 interface LeaderboardEntry {
   id: string;
   username: string;
@@ -16,7 +18,7 @@ interface LeaderboardEntry {
 export async function AMARIGetLeaderboard(
   tkn: string | null,
   guildId: string,
-): Promise<LeaderboardEntry[]> {
+): Promise<UserLevels[]> {
   let pg = 0;
   const values: LeaderboardEntry[] = [];
   if (!tkn) throw new Error("No Amari API key provided. Cannot use Amari API.");
@@ -40,5 +42,11 @@ export async function AMARIGetLeaderboard(
     pg += 1;
   }
 
-  return values;
+  return values.map((u) => {
+    return {
+      uid: u.id,
+      lvl: u.level,
+      current_xp: Number(u.exp),
+    };
+  });
 }

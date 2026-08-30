@@ -1,7 +1,7 @@
-import { AMARIGetLeaderboard } from "./amari.js";
-import { LURKRGetLeaderboard } from "./lurkr.js";
-import { MEE6GetLeaderboard, MEE6GetRewards } from "./mee6.js";
-import { TATSUGetLeaderboard } from "./tatsu.js";
+import { AMARIGetLeaderboard } from "./amari.ts";
+import { LURKRGetLeaderboard } from "./lurkr.ts";
+import { MEE6GetLeaderboard, MEE6GetRewards } from "./mee6.ts";
+import { TATSUGetLeaderboard } from "./tatsu.ts";
 
 /** A user/guild ID. MEE6 has a slightly inconsistent way of telling you this, as far as I know. */
 export type Identifier = string | { id: string };
@@ -17,7 +17,7 @@ export function GET_ID(id: Identifier): string {
 }
 
 /**
- * A user's leveling information, in a common format **with levels**.
+ * A user's leveling information, in a common format.
  *
  * @interface UserLevels
  */
@@ -38,11 +38,9 @@ export interface UserLevels {
 export interface LevelRewards {
   /** Level at which the reward is granted. */
   lvl: number;
-  /** Role IDs. */
+  /** Role IDs. Empty if unsupported. */
   roles: string[];
-  /** Channel IDs.
-   * IMPORTANT: This is always empty.
-   */
+  /** Channel IDs. Empty if unsupported. */
   channels: string[];
 }
 
@@ -55,9 +53,8 @@ export interface LevelRewards {
  * LURKR = 2,
  * AMARI = 3,
  * ```
- * @enum {number}
  */
-export const enum Supported {
+export enum Supported {
   MEE6 = 0,
   TATSU = 1,
   LURKR = 2,
@@ -71,7 +68,7 @@ export const enum Supported {
  * MEE6 = 0
  * ```
  */
-export const enum SupportedAndRewarded {
+export enum SupportedAndRewarded {
   MEE6 = 0,
 }
 
@@ -104,57 +101,20 @@ export class Leveler {
 
   /** Gets the whole server leaderboard from a supported bot. Throws if unable to get it. */
   public async GetLeaderboard(target: Supported): Promise<UserLevels[]> {
-    if (target == Supported.MEE6) {
-      const levels = await MEE6GetLeaderboard(this.guild);
-      return levels.map((u) => {
-        return {
-          uid: u.id,
-          lvl: u.level,
-          current_xp: u.xp.totalXp,
-        };
-      });
-    } else if (target === Supported.LURKR) {
-      const levels = await LURKRGetLeaderboard(this.lurkr_api, this.guild);
-      return levels.map((u) => {
-        return {
-          uid: u.userId,
-          lvl: u.level,
-          current_xp: u.xp,
-        };
-      });
-    } else if (target === Supported.AMARI) {
-      const levels = await AMARIGetLeaderboard(this.amari_api, this.guild);
-      return levels.map((u) => {
-        return {
-          uid: u.id,
-          lvl: u.level,
-          current_xp: Number(u.exp),
-        };
-      });
-    } else {
-      const levels = await TATSUGetLeaderboard(this.tatsu_api, this.guild);
-      return levels.map((u) => {
-        return {
-          uid: u.user_id,
-          current_xp: u.score,
-        };
-      });
-    }
+    if (target == Supported.MEE6) return await MEE6GetLeaderboard(this.guild);
+    else if (target === Supported.LURKR) 
+      return await LURKRGetLeaderboard(this.lurkr_api, this.guild);
+     else if (target === Supported.AMARI) 
+      return await AMARIGetLeaderboard(this.amari_api, this.guild);
+     else return await TATSUGetLeaderboard(this.tatsu_api, this.guild);
   }
 
-  /** Gets the server's level rewards from a supported bot. Throws if unable to get them. */
+  /** Gets the server's level rewards from a supported bot. Throws if unable to get it, returns `null` if bot is unsupported. */
   public async GetRewards(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    _target: SupportedAndRewarded,
-  ): Promise<LevelRewards[]> {
-    const rewards = await MEE6GetRewards(this.guild);
-
-    return rewards.map((r) => {
-      return {
-        lvl: r.rank,
-        roles: [r.role.id],
-        channels: [],
-      };
-    });
+    target: SupportedAndRewarded,
+  ): Promise<LevelRewards[] | null> {
+    return target == SupportedAndRewarded.MEE6
+      ? await MEE6GetRewards(this.guild)
+      : null;
   }
 }
