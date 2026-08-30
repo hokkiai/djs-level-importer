@@ -46,6 +46,5 @@
     "type": "git",
     "url": "git+https://github.com/sokoradesu/honlvlimport.git"
   },
-  "type": "module",
-  "types": "./dist/main.d.ts"
+  "type": "module"
 }
